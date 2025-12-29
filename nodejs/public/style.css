@@ -1,0 +1,133 @@
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: #f0f2f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+.card {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    color: #555;
+    font-weight: 500;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+    box-sizing: border-box;
+    /* Fix padding issue */
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.status {
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 6px;
+    text-align: center;
+}
+
+.status.success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status.error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.hidden {
+    display: none;
+}
+
+.instructions {
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+    font-size: 14px;
+    color: #666;
+    line-height: 1.6;
+}
+
+.instructions-title {
+    font-weight: 600;
+    color: #444;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.instructions ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.ip-info {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+    font-size: 14px;
+}
+
+.ip-info p {
+    margin: 5px 0;
+    color: #495057;
+}
+
+.ip-info span {
+    font-family: monospace;
+    font-weight: bold;
+    color: #007bff;
+}

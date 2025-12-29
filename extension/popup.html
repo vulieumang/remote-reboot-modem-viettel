@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modem Reboot Extension</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <h2>Modem Reboot Extension</h2>
+        <form id="rebootForm">
+            <div class="form-group">
+                <label for="url">Modem URL</label>
+                <input type="text" id="url" value="https://192.168.1.1" required>
+            </div>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" value="admin" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" value="" required>
+            </div>
+            <button type="submit" id="rebootBtn">Reboot Modem</button>
+        </form>
+
+        <div id="ip-info" class="ip-info">
+            <p><strong>WAN IP trước:</strong> <span id="ip-before">Loading...</span></p>
+            <p id="ip-after-container" class="hidden"><strong>WAN IP sau:</strong> <span id="ip-after">Đang
+                    đợi...</span></p>
+        </div>
+
+        <div id="status" class="status hidden"></div>
+        <div class="instructions">
+            <span class="instructions-title">Hướng dẫn:</span>
+            <ul>
+                <li>Username/Pass ở mặt sau modem.</li>
+                <li>Mặc định là <code>admin</code>.</li>
+                <li>URL: <code>https://192.168.1.1</code></li>
+            </ul>
+        </div>
+    </div>
+    <script src="popup.js"></script>
+</body>
+
+</html>

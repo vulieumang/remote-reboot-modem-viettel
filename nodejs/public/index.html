@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modem Reboot (Node.js)</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Modem Reboot (Node.js)</h1>
+        <div class="card">
+            <form id="rebootForm">
+                <div class="form-group">
+                    <label for="url">Modem URL</label>
+                    <input type="text" id="url" value="https://192.168.1.1" required>
+                </div>
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" value="admin" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" value="" required>
+                </div>
+                <button type="submit" id="rebootBtn">Reboot Modem</button>
+            </form>
+
+            <div id="ip-info" class="ip-info">
+                <p><strong>WAN IP trước:</strong> <span id="ip-before">Loading...</span></p>
+                <p id="ip-after-container" class="hidden"><strong>WAN IP sau:</strong> <span id="ip-after">Đang đợi
+                        internet...</span></p>
+            </div>
+
+            <div id="status" class="status hidden"></div>
+            <div class="instructions">
+                <span class="instructions-title">Hướng dẫn nhanh:</span>
+                <ul>
+                    <li>Username/Password mặc định được dán ở **mặt sau modem**.</li>
+                    <li>Thông thường Username là <code>admin</code>.</li>
+                    <li>URL mặc định là <code>https://192.168.1.1</code>.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script>
+        async function fetchIP(elementId) {
+            try {
+                const res = await fetch('/api/ip');
+                const data = await res.json();
+                document.getElementById(elementId).textContent = data.ip;
+                return data.ip;
+            } catch (err) {
+                document.getElementById(elementId).textContent = 'Không thể lấy IP';
+                return null;
+            }
+        }
+
+        // Fetch IP Before on load
+        fetchIP('ip-before');
+
+        document.getElementById('rebootForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('rebootBtn');
+            const status = document.getElementById('status');
+            const ipAfterContainer = document.getElementById('ip-after-container');
+            const ipAfter = document.getElementById('ip-after');
+
+            btn.disabled = true;
+            btn.textContent = 'Processing...';
+            status.className = 'status hidden';
+
+            const data = {
+                url: document.getElementById('url').value,
+                username: document.getElementById('username').value,
+                password: document.getElementById('password').value
+            };
+
+            try {
+                const res = await fetch('/api/reboot', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await res.json();
+
+                if (result.success) {
+                    status.innerHTML = `✅ ${result.message}<br><br><strong style="color: #e67e22;">⚠️ Lưu ý: Internet sẽ có lại sau khoảng 5 phút.</strong>`;
+                    status.className = 'status success';
+                    ipAfterContainer.classList.remove('hidden');
+
+                    // Periodically try to fetch new IP
+                    let attempts = 0;
+                    const interval = setInterval(async () => {
+                        attempts++;
+                        ipAfter.textContent = `Đang kiểm tra... (${attempts})`;
+                        const newIp = await fetchIP('ip-after');
+                        if (newIp && newIp !== document.getElementById('ip-before').textContent) {
+                            clearInterval(interval);
+                        }
+                        if (attempts > 60) clearInterval(interval); // Stop after 10 mins
+                    }, 10000);
+                } else {
+                    status.textContent = result.message;
+                    status.className = 'status error';
+                }
+            } catch (err) {
+                // If the fetch fails entirely, it might because the internet is down
+                status.innerHTML = `✅ Modem đang khởi động lại!<br>Kết nối đã bị ngắt theo dự kiến.<br><br><strong style="color: #e67e22;">⚠️ Lưu ý: Vui lòng đợi 5 phút sau sẽ có internet lại.</strong>`;
+                status.className = 'status success';
+                ipAfterContainer.classList.remove('hidden');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Reboot Modem';
+            }
+        });
+    </script>
+</body>
+
+</html>
