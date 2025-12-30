@@ -14,7 +14,7 @@
         <form id="rebootForm">
             <div class="form-group">
                 <label for="url">Modem URL</label>
-                <input type="text" id="url" value="https://192.168.1.1" required>
+                <input type="text" id="url" value="http://192.168.1.1" required>
             </div>
             <div class="form-group">
                 <label for="username">Username</label>
@@ -24,7 +24,10 @@
                 <label for="password">Password</label>
                 <input type="password" id="password" value="" required>
             </div>
-            <button type="submit" id="rebootBtn">Reboot Modem</button>
+            <div class="button-group">
+                <button type="submit" id="rebootBtn">Reboot Modem</button>
+                <button type="button" id="openModemBtn" class="secondary-btn">Open Modem</button>
+            </div>
         </form>
 
         <div id="ip-info" class="ip-info">
